@@ -18,11 +18,18 @@ assetfinder --subs-only $domain | tee -a op.txt
 amass enum -passive -d $doamin | tee -a op.txt
 amass enum -active -d $domain -ip | tee -a amass_ips.txt
 cat amass_ips.txt | awk '{print $1}' | tee -a op.txt
+curl -s https://crt.sh/\?q\=$1\&output\=json | jq &>/dev/null | awk -F'"' '/value/{print $4}' | sed 's/*.//g;s/\\n/\n/g' | sed 's/ /\n/g' | tee -a op.txt
+curl -s https://otx.alienvault.com/api/v1/indicators/domain/$1/passive_dns | jq &>/dev/null | awk -F': ' '/"hostname": "(.*'$1')"/{print $2}' | sed 's/[",]//g' | sed 's/ /\n/g' | tee -a op.txt
+curl -s https://dns.bufferover.run/dns\?q\=.$1 | awk -F',' '/.*'$1'/{print $2}' | sed 's/"//g' | sed 's/ /\n/g' | tee -a op.txt
+curl -s http://api.hackertarget.com/hostsearch/\?q\=$1 | cut -d',' -f1 | sed 's/ /\n/g' | tee -a op.txt
+curl -s https://rapiddns.io/subdomain/$1\?full\=1 | awk -F'">' '/'$1'/{print $2}' | cut -d'<' -f1 | awk 'NF' | sed 's/ /\n/g' | tee -a op.txt
+curl -s https://api.sublist3r.com/search.php\?domain\=$1 | jq &>/dev/null | awk -F'"' '/'$1'/{print $2}' | sed 's/ /\n/g' | tee -a op.txt
+curl -s https://www.threatcrowd.org/searchApi/v2/domain/report/\?domain\=$1 | jq &>/dev/null | awk -F'"' '/\.'$1'/{print $2}' | sed 's/ //g' | sed 's/ /\n/g' | tee -a op.txt
 cat op.txt | sort -u | tee -a all.txt
 echo -e "######Starting Bruteforce######\n"
 altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt
 mv results_output.txt dns_op.txt
-cat dns_op.txt output.txt
+cat dns_op.txt >output.txt
 
 cat output.txt | sort -u | tee -a all.txt
 echo "Checking for alive subdomains"
@@ -31,8 +38,8 @@ cat alive2.txt | sort -u | tee -a alive.txt
 
 ~/tools/massdns/bin/massdns -r ~/tools/massdns/lists/resolvers.txt -q -t A -o S -w massdns.raw all.txt
 cat massdns.raw | grep -e ' A ' | cut -d 'A' -f 2 | tr -d ' ' >massdns.txt
-cat *.txt | sort -V | uniq >$IP_PATH/final-ips.txt
-echo -e "${BLUE}[*] Check the list of IP addresses at $IP_PATH/final-ips.txt${RESET}"
+cat *.txt | sort -V | uniq >final-ips.txt
+echo -e "${BLUE}[*] Check the list of IP addresses at final-ips.txt${RESET}"
 
 echo "Starting Nuclei"
 mkdir nuclei_op
@@ -55,7 +62,7 @@ cd wayback_data
 for i in $(cat ../all.txt); do echo $i | waybackurls; done | tee -a wb.txt
 cat wb.txt | sort -u | unfurl --unique keys | tee -a paramlist.txt
 
-cat wb.txt u | grep -P "\w+\.js(\?|$)" | sort -u | tee -a jsurls.txt
+cat wb.txt | grep -P "\w+\.js(\?|$)" | sort -u | tee -a jsurls.txt
 
 cat wb.txt | grep -P "\w+\.php(\?|$)" | sort -u | tee -a phpurls.txt
 
@@ -67,8 +74,8 @@ cat wb.txt | grep -P "\w+\.txt(\?|$)" | sort -u | tee -a robots.txt
 
 cd ..
 
-echo "Looking for HTTP request smugglig"
-smuggler -u alive.txt | tee -a smuggler_op.txt
+echo "Looking for HTTP request smuggling"
+cat alive.txt | smuggler | tee -a smuggler_op.txt
 
 mkdir scripts
 mkdir scriptsresponse
@@ -120,8 +127,7 @@ jsep() {
         jsfinder
         endpoints
 }
-jsep
-
-cat endpoints/*/* | sort -u | tee -a endpoints.txt
+#jsep
+#cat endpoints/*/* | sort -u | tee -a endpoints.txt
 
 for i in $(cat alive.txt); do ffuf -u $i/FUZZ -w ~/tools/dirsearch/db/dicc.txt -mc 200 -t 60; done | tee -a ffuf_op.txt

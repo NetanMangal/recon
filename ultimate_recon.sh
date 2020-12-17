@@ -47,7 +47,7 @@ echo "${GREEN} ######################################################### ${RESET
 echo "${GREEN} #                Subdomain Bruteforcing                 # ${RESET}"
 echo "${GREEN} ######################################################### ${RESET}"
 
-altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt
+altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 5
 mv results_output.txt dns_op.txt
 cat dns_op.txt >output.txt
 cat output.txt | sort -u | tee -a all.txt
@@ -67,6 +67,8 @@ echo "${GREEN} ######################################################### ${RESET
 cat massdns.raw | grep -e ' A ' | cut -d 'A' -f 2 | tr -d ' ' >massdns.txt
 cat *.txt | sort -V | uniq >final-ips.txt
 echo -e "${BLUE}[*] Check the list of IP addresses at final-ips.txt${RESET}"
+
+nikto --host $domain >nikto.txt
 
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #                       Starting Nuclei                 # ${RESET}"

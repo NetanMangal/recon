@@ -95,24 +95,24 @@ echo "${BLUE} ######################################################### ${RESET}
 
 whatweb -i alive.txt | tee -a whatweb_op.txt
 
-echo "${GREEN} ######################################################### ${RESET}"
-echo "${GREEN} #                          WayBack                      # ${RESET}"
-echo "${GREEN} ######################################################### ${RESET}"
-
-mkdir wayback_data
-for i in $(cat all.txt); do echo $i | waybackurls; done | tee -a wayback_data/wb.txt
-cat wayback_data/wb.txt | sort -u | unfurl --unique keys | tee -a wayback_data/paramlist.txt
-cat wayback_data/wb.txt | grep -P "\w+\.js(\?|$)" | sort -u | tee -a wayback_data/jsurls.txt
-cat wayback_data/wb.txt | grep -P "\w+\.php(\?|$)" | sort -u | tee -a wayback_data/phpurls.txt
-cat wayback_data/wb.txt | grep -P "\w+\.aspx(\?|$)" | sort -u | tee -a wayback_data/aspxurls.txt
-cat wayback_data/wb.txt | grep -P "\w+\.jsp(\?|$)" | sort -u | tee -a wayback_data/jspurls.txt
-cat wayback_data/wb.txt | grep -P "\w+\.txt(\?|$)" | sort -u | tee -a wayback_data/robots.txt
-
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #            Looking for HTTP request smuggling         # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
 cat alive.txt | smuggler | tee -a smuggler_op.txt
+
+# echo "${GREEN} ######################################################### ${RESET}"
+# echo "${GREEN} #                          WayBack                      # ${RESET}"
+# echo "${GREEN} ######################################################### ${RESET}"
+
+# mkdir wayback_data
+# for i in $(cat all.txt); do echo $i | waybackurls; done | tee -a wayback_data/wb.txt
+# cat wayback_data/wb.txt | sort -u | unfurl --unique keys | tee -a wayback_data/paramlist.txt
+# cat wayback_data/wb.txt | grep -P "\w+\.js(\?|$)" | sort -u | tee -a wayback_data/jsurls.txt
+# cat wayback_data/wb.txt | grep -P "\w+\.php(\?|$)" | sort -u | tee -a wayback_data/phpurls.txt
+# cat wayback_data/wb.txt | grep -P "\w+\.aspx(\?|$)" | sort -u | tee -a wayback_data/aspxurls.txt
+# cat wayback_data/wb.txt | grep -P "\w+\.jsp(\?|$)" | sort -u | tee -a wayback_data/jspurls.txt
+# cat wayback_data/wb.txt | grep -P "\w+\.txt(\?|$)" | sort -u | tee -a wayback_data/robots.txt
 
 # mkdir scripts
 # mkdir scriptsresponse
@@ -167,10 +167,10 @@ cat alive.txt | smuggler | tee -a smuggler_op.txt
 # jsep
 # cat endpoints/*/* | sort -u | tee -a endpoints.txt
 
-echo "${GREEN} ######################################################### ${RESET}"
-echo "${GREEN} #                            FFUF                       # ${RESET}"
-echo "${GREEN} ######################################################### ${RESET}"
+# echo "${GREEN} ######################################################### ${RESET}"
+# echo "${GREEN} #                            FFUF                       # ${RESET}"
+# echo "${GREEN} ######################################################### ${RESET}"
 
-for i in $(cat alive.txt); do ffuf -u $i/FUZZ -w ~/tools/dirsearch/db/dicc.txt -mc 200 -t 60; done | tee -a ffuf_op.txt
+# for i in $(cat alive.txt); do ffuf -u $i/FUZZ -w ~/tools/dirsearch/db/dicc.txt -mc 200 -t 60; done | tee -a ffuf_op.txt
 
 cd ..

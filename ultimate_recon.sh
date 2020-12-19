@@ -47,7 +47,7 @@ echo "${GREEN} ######################################################### ${RESET
 echo "${GREEN} #                Subdomain Bruteforcing                 # ${RESET}"
 echo "${GREEN} ######################################################### ${RESET}"
 
-altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 5
+altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 100
 mv results_output.txt dns_op.txt
 cat dns_op.txt >output.txt
 cat output.txt | sort -u | tee -a all.txt
@@ -56,7 +56,7 @@ echo "${BLUE} ######################################################### ${RESET}
 echo "${BLUE} #              Checking for alive subdomains            # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
-cat all.txt | httprobe | tee -a alive2.txt
+cat all.txt | httprobe -c 50 | tee -a alive2.txt
 cat alive2.txt | sort -u | tee -a alive.txt
 
 echo "${GREEN} ######################################################### ${RESET}"
@@ -68,38 +68,38 @@ cat massdns.raw | grep -e ' A ' | cut -d 'A' -f 2 | tr -d ' ' >massdns.txt
 cat *.txt | sort -V | uniq >final-ips.txt
 echo -e "${BLUE}[*] Check the list of IP addresses at final-ips.txt${RESET}"
 
-nikto --host $domain >nikto.txt
+# nikto --host $domain >nikto.txt
 
-echo "${BLUE} ######################################################### ${RESET}"
-echo "${BLUE} #                       Starting Nuclei                 # ${RESET}"
-echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} #                       Starting Nuclei                 # ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
 
-mkdir nuclei_op
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/cves/*.yaml" -c 60 -o nuclei_op/cves.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/files/*.yaml" -c 60 -o nuclei_op/files.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/panels/*.yaml" -c 60 -o nuclei_op/panels.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/security-misconfiguration/*.yaml" -c 60 -o nuclei_op/security-misconfiguration.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/technologies/*.yaml" -c 60 -o nuclei_op/technologies.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/tokens/*.yaml" -c 60 -o nuclei_op/tokens.txt
-nuclei -l alive.txt -t "/root/tools/nuclei-templates/vulnerabilities/*.yaml" -c 60 -o nuclei_op/vulnerabilities.txt
+# mkdir nuclei_op
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/cves/*.yaml" -c 60 -o nuclei_op/cves.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/files/*.yaml" -c 60 -o nuclei_op/files.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/panels/*.yaml" -c 60 -o nuclei_op/panels.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/security-misconfiguration/*.yaml" -c 60 -o nuclei_op/security-misconfiguration.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/technologies/*.yaml" -c 60 -o nuclei_op/technologies.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/tokens/*.yaml" -c 60 -o nuclei_op/tokens.txt
+# nuclei -l alive.txt -t "/root/tools/nuclei-templates/vulnerabilities/*.yaml" -c 60 -o nuclei_op/vulnerabilities.txt
 
-echo "${GREEN} ######################################################### ${RESET}"
-echo "${GREEN} #           Looking for CORS misconfiguration           # ${RESET}"
-echo "${GREEN} ######################################################### ${RESET}"
+# echo "${GREEN} ######################################################### ${RESET}"
+# echo "${GREEN} #           Looking for CORS misconfiguration           # ${RESET}"
+# echo "${GREEN} ######################################################### ${RESET}"
 
-python3 ~/tools/Corsy/corsy.py -i alive.txt -t 40 | tee -a corsy_op.txt
+# python3 ~/tools/Corsy/corsy.py -i alive.txt -t 40 | tee -a corsy_op.txt
 
-echo "${BLUE} ######################################################### ${RESET}"
-echo "${BLUE} #                   Starting CMS detection              # ${RESET}"
-echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} #                   Starting CMS detection              # ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
 
-whatweb -i alive.txt | tee -a whatweb_op.txt
+# whatweb -i alive.txt | tee -a whatweb_op.txt
 
-echo "${BLUE} ######################################################### ${RESET}"
-echo "${BLUE} #            Looking for HTTP request smuggling         # ${RESET}"
-echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} #            Looking for HTTP request smuggling         # ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
 
-cat alive.txt | smuggler | tee -a smuggler_op.txt
+# cat alive.txt | smuggler | tee -a smuggler_op.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #                          WayBack                      # ${RESET}"

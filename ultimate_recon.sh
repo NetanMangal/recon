@@ -50,7 +50,7 @@ echo "${GREEN} ######################################################### ${RESET
 altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 100
 mv results_output.txt dns_op.txt
 cat dns_op.txt >output.txt
-cat output.txt | sort -u | tee -a all.txt
+cat output.txt | awk -F ":" '{print $1}' | sort -u | tee -a all.txt
 
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #              Checking for alive subdomains            # ${RESET}"

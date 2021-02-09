@@ -49,10 +49,16 @@ echo "${GREEN} ######################################################### ${RESET
 echo "${GREEN} #                Subdomain Bruteforcing                 # ${RESET}"
 echo "${GREEN} ######################################################### ${RESET}"
 
-altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 150
+altdns -i all.txt -o data_output -w ~/tools/recon/patterns.txt -r -s results_output.txt -t 250
 mv results_output.txt dns_op.txt
 cat dns_op.txt >output.txt
 cat output.txt | awk -F ":" '{print $1}' | sort -u | tee -a all.txt
+
+echo "${BLUE} ######################################################### ${RESET}"
+echo "${BLUE} #                      Running Naabu                    # ${RESET}"
+echo "${BLUE} ######################################################### ${RESET}"
+
+naabu -iL all.txt -c 40 -p - -nmap-cli 'nmap -nv -sSV -A -oN nmap_scan.txt' -o naabu_portscan.txt
 
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #              Checking for alive subdomains            # ${RESET}"
@@ -60,12 +66,6 @@ echo "${BLUE} ######################################################### ${RESET}
 
 cat all.txt | httprobe -c 100 | tee -a alive2.txt
 cat alive2.txt | sort -u | tee -a alive.txt
-
-echo "${BLUE} ######################################################### ${RESET}"
-echo "${BLUE} #                      Running Naabu                    # ${RESET}"
-echo "${BLUE} ######################################################### ${RESET}"
-
-naabu -iL dom -c 40 -p - -nmap-cli 'nmap -nv -sSV -A -oN nmap_scan.txt' -o naabu_portscan.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #                          MassDNS                      # ${RESET}"

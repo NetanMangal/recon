@@ -75,13 +75,20 @@ echo -e "${BLUE}[*] Check the list of IP addresses at final-ips.txt${RESET}"
 # echo "${BLUE} ######################################################### ${RESET}"
 
 # mkdir nuclei_op
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/cves/*.yaml" -c 60 -o nuclei_op/cves.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/files/*.yaml" -c 60 -o nuclei_op/files.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/panels/*.yaml" -c 60 -o nuclei_op/panels.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/security-misconfiguration/*.yaml" -c 60 -o nuclei_op/security-misconfiguration.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/technologies/*.yaml" -c 60 -o nuclei_op/technologies.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/tokens/*.yaml" -c 60 -o nuclei_op/tokens.txt
-# nuclei -l alive.txt -t "/root/tools/nuclei-templates/vulnerabilities/*.yaml" -c 60 -o nuclei_op/vulnerabilities.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/cves/" -c 60 -o nuclei_op/cves.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/default-logins/" -c 60 -o nuclei_op/default-logins.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/dns/" -c 60 -o nuclei_op/dns.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/exposed-panels/" -c 60 -o nuclei_op/exposed-panels.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/exposed-tokens/" -c 60 -o nuclei_op/exposed-tokens.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/exposures/" -c 60 -o nuclei_op/exposures.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/fuzzing/" -c 60 -o nuclei_op/fuzzing.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/helpers/" -c 60 -o nuclei_op/helpers.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/miscellaneous/" -c 60 -o nuclei_op/miscellaneous.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/misconfiguration/" -c 60 -o nuclei_op/misconfiguration.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/takeovers/" -c 60 -o nuclei_op/takeovers.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/technologies/" -c 60 -o nuclei_op/technologies.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/vulnerabilities/" -c 60 -o nuclei_op/vulnerabilities.txt
+nuclei -l alive.txt -t "/root/tools/nuclei-templates/workflows/" -c 60 -o nuclei_op/workflows.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #           Looking for CORS misconfiguration           # ${RESET}"

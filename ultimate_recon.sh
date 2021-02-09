@@ -65,7 +65,7 @@ echo "${BLUE} ######################################################### ${RESET}
 echo "${BLUE} #                      Running Naabu                    # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
-naabu -iL all.txt -c 40 -p - -no-color -o naabu_portscan.txt;
+naabu -iL dom -c 40 -p - -nmap-cli 'nmap -nv -sSV -A -oN nmap_scan.txt' -o naabu_portscan.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #                          MassDNS                      # ${RESET}"

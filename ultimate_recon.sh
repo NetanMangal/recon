@@ -58,7 +58,7 @@ echo "${BLUE} ######################################################### ${RESET}
 echo "${BLUE} #                      Running Naabu                    # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
-naabu -iL all.txt -c 40 -p - -nmap-cli 'nmap -nv -sSV  -A -oN nmap_scan.txt' -o naabu_portscan.txt
+naabu -iL all.txt -c 40 -p - -nmap-cli 'nmap -nv -sSV -A -oN --script nmap-vulners,vulscan nmap_scan.txt' -o naabu_portscan.txt
 
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #              Checking for alive subdomains            # ${RESET}"

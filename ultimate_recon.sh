@@ -58,13 +58,13 @@ echo "${BLUE} ######################################################### ${RESET}
 echo "${BLUE} #                      Running Naabu                    # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
-naabu -iL all.txt -c 40 -p - -nmap-cli 'nmap -nv -sSV -A -oN nmap_scan.txt' -o naabu_portscan.txt
+naabu -iL all.txt -c 40 -p - -nmap-cli 'nmap -nv -sSV  -A -oN nmap_scan.txt' -o naabu_portscan.txt
 
 echo "${BLUE} ######################################################### ${RESET}"
 echo "${BLUE} #              Checking for alive subdomains            # ${RESET}"
 echo "${BLUE} ######################################################### ${RESET}"
 
-cat all.txt | httprobe -c 100 | tee -a alive2.txt
+cat naabu_portscan.txt | httprobe -c 100 | tee -a alive2.txt
 cat alive2.txt | sort -u | tee -a alive.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
@@ -110,11 +110,11 @@ python3 ~/tools/Corsy/corsy.py -i alive.txt -t 40 | tee -a corsy_op.txt
 
 # whatweb -i alive.txt | tee -a whatweb_op.txt
 
-echo "${BLUE} ######################################################### ${RESET}"
-echo "${BLUE} #            Looking for HTTP request smuggling         # ${RESET}"
-echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
+# echo "${BLUE} #            Looking for HTTP request smuggling         # ${RESET}"
+# echo "${BLUE} ######################################################### ${RESET}"
 
-cat alive.txt | smuggler | tee -a smuggler_op.txt
+# cat alive.txt | smuggler | tee -a smuggler_op.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #                          WayBack                      # ${RESET}"

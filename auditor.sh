@@ -26,7 +26,7 @@ echo "${GREEN} #                         $domain                    # ${RESET}"
 echo "${GREEN} ######################################################### ${RESET}"
 
 for item in $sources; do
-    if [[ $(ls -lah | awk '{print $NF}' | grep -E "$item") -ne "$item" ]]; then
+    if [[ $(ls -lah | awk '{print $NF}' | grep -E "^$item\$") != "$item" ]]; then
         echo "${RED} # $item not found # ${RESET}"
     fi
 done

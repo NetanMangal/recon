@@ -7,10 +7,6 @@ GREEN=$(tput setaf 2)
 BLUE=$(tput setaf 4)
 RESET=$(tput sgr0)
 
-echo "${RED} ######################################################### ${RESET}"
-echo "${RED} #                         Let's Hunt                    # ${RESET}"
-echo "${RED} ######################################################### ${RESET}"
-
 while getopts ":d:" input; do
         case "$input" in
         d)

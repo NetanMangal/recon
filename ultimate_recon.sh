@@ -66,6 +66,7 @@ echo "${BLUE} ######################################################### ${RESET}
 
 cat naabu_portscan.txt | httprobe -c 100 | tee -a alive2.txt
 cat alive2.txt | sort -u | tee -a alive.txt
+rm alive2.txt
 
 # echo "${GREEN} ######################################################### ${RESET}"
 # echo "${GREEN} #                          MassDNS                      # ${RESET}"
